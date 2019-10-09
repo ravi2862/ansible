@@ -1,0 +1,15 @@
+---
+- name: play to tagings
+  hosts: all
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: create tar of httpd home dir
+      command : tar cfz /var/tmp/production.tar.gz /var/www/html
+      tags: production
+      when: inventory_hostname in groups ['production']
+
+    - name: create tar of httpd log
+      command: tar cfz /var/tmp/backup.tar.gz /var/log/httpd
+      tags: backup
+      when: inventory_hostname in groups ['backup']

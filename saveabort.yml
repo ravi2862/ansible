@@ -1,0 +1,18 @@
+---
+- name: play to check the file if not crearte
+  hosts: node1
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: check the file
+      stat:
+        path: /etc/saveabort.txt
+      register: result
+
+    - name: create the file
+      copy:
+        dest: /etc/saveabort.txt
+        content: " I am There"
+      when: result.stat.exists == false     
+          
+  

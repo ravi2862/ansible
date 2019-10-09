@@ -1,0 +1,46 @@
+---
+- name: play to configure httpd auth
+  hosts: node2
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: create private folder
+      file:
+        dest: /var/www/html/private
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: copy htaccess file 
+      get_url:
+        url: http://ipa.testserver.com/materials/tasks/htaccess
+        dest: /var/www/html/private/.htaccess
+        mode: 0644
+
+    - name: copy htpasswd file
+      get_url:
+        url: http://ipa.testserver.com/materials/tasks/htpasswd
+        dest: /var/www/html/private/.htpasswd
+        mode: 0644
+
+    - name: use replace module
+      replace:
+        dest: /etc/httpd/conf/httpd.conf
+        regexp: 'AllowOverride None'
+        replace: 'AllowOverride AuthConfig'
+
+    - name: copy http
+      copy:
+        dest: /var/www/html/private/index.html
+        content: "This node {{ ansible_hostname }} is protected"
+
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
+
+
+
+
+

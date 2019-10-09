@@ -1,0 +1,38 @@
+---
+- name: play to create users and groups and delete users
+  hosts: node1
+  become: true
+  remote_user: ansible
+  roles:
+    - examfun
+  tasks:
+    - name: create groups
+      group:
+        name: "{{ item }}"
+      with_items:
+        - staff
+        - guest
+        - webclients
+
+    - name: create users in staff
+      user: 
+        name: "{{ item }}"
+        groups: staff,webclients
+        append: yes
+      with_items: "{{ staff }}"
+
+    - name: create user guest
+      user:
+        name: "{{ item }}"
+        groups: guest,webclients
+        append: yes
+      with_items: "{{ guest }}"
+
+    - name: delete user from revoke
+      user:
+        name: "{{ item }}"
+        state: absent
+        remove: yes
+      with_items: "{{ revoke }}"        
+         
+                

@@ -1,0 +1,11 @@
+---
+- name: testing downloading
+  hosts: node2
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: dowload file
+      get_url:
+        url: http://ipa.testserver.com/materials/tasks/access
+        dest: /tmp
+        force: yes

@@ -1,0 +1,47 @@
+---
+- name: enabl internet service
+  hosts: web
+  become: true
+  tasks:
+    - name: latest verstion of httpd and firewalld installed
+      yum:
+        name:
+          - httpd
+          - firewalld
+        state: latest
+
+    - name: firewalld enable and running
+      service:
+        name: firewalld
+        enabled: true
+        state: started
+
+    - name: firewald permits httpd service
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: yes
+
+    - name: httpd enabled and running
+      service:
+        name: httpd
+        enabled: true
+        state: started
+
+    - name: test html page installed
+      get_url:
+        url: "http://rhel8.testserver.com/ravi/tasks/index.html"
+        dest: /var/www/html/index.html
+
+
+- name: test intrnet web server
+  hosts: localhost
+  become: no
+  tasks:
+    - name: connect to intranet webserver
+      uri:
+        url: http://node2.example.com
+        status_code: 200
+
+       

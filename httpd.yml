@@ -1,0 +1,28 @@
+---
+- name: play to install httpd server
+  hosts: node2 
+  become: true
+  tasks:
+    - name: install httpd 
+      yum:
+        name: httpd
+        state: latest
+
+    - name: download httpd.conf file
+      get_url:
+        url: http://ipa.testserver.com/materials/tasks/httpd.conf
+        dest: /etc/httpd/conf/httpd.conf
+        force: yes
+
+    - name: change content in the file 
+      lineinfile:
+        dest: /var/www/html/index.html
+        line: "Hello from {{ ansible_hostname }}"
+        create: yes
+
+    - name: start and enable service of httpd
+      service:
+        name: httpd
+        state: started
+        enabled: true
+

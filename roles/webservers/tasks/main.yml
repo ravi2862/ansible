@@ -1,0 +1,5 @@
+---
+- name: install apache on node1
+  yum: name= '{{redhat_apache}}' state=latest
+  when: ansible_os_family == "RedHat"
+  notify: Restart Apache

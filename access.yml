@@ -1,0 +1,25 @@
+---
+- name: please check the sit and create
+  hosts: node2
+  remote_user: ansible
+  tasks:
+    - block:
+      - name: check the web site
+        uri:
+          url: http://ipa.testserver.com/materials/tasks/access
+        register: result
+        delegate_to: localhost
+
+      - name: create website
+        become: true
+        get_url:
+          url: http://ipa.testserver.com/materials/tasks/access
+          dest: /var/www/html/access.html
+        when: result.status == 200
+      rescue:
+      - name: create if sit is not accessable
+        become: true
+        copy:
+           dest: /var/www/html/noncontent.html
+           content: "I am not Accessble"
+

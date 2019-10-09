@@ -1,0 +1,19 @@
+---
+- name: play to tag based on hostname
+  hosts: web
+  become: true
+  remote_user: ansible
+  tasks:
+    - name: create a file on node2
+      copy:
+        dest: /var/www/html/tag1.html
+        content: " I am Tag1"
+      tags: tag1  
+      when: ansible_hostname == "node2"   
+    
+    - name: create file on node1
+      copy:
+        dest: /var/www/html/tag2.html
+        content: "I am Tag2"
+      tags: tag2
+      when: ansible_hostname == "node1"

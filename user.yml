@@ -1,0 +1,11 @@
+---
+- name: create sample user
+  hosts: node1
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: create dummy user
+      user:
+        name: dummy
+        uid: 5000
+        state: present

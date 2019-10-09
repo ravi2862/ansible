@@ -1,0 +1,14 @@
+---
+- name: copy module
+  hosts: node2
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: copy command
+      copy:
+        dest: /etc/motd
+        content: "this is madhu\n"
+
+    - name: use shell command
+      shell: echo "this is another line" >> /etc/motd
+        

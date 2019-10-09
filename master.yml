@@ -1,0 +1,9 @@
+---
+- name: play test roles
+  hosts: node2
+  become: true
+  remote_user: ansible
+  roles:
+    - webservers
+ 
+    
